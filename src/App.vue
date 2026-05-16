@@ -1,17 +1,35 @@
 <script setup lang="ts">
-import axios from 'axios';
-
-
-axios.get('https://db.ygoprodeck.com/api/v7/cardsets.php').then(odg => console.log(odg))
-
+  const year = new Date().getFullYear()
 </script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container">
+      
+      <RouterLink class="navbar-brand" to="/"> 
+        <img src="/puzzle.png" alt="Logo" width="32" height="32" /> Yu-Gi-Oh! Shop
+      </RouterLink>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <RouterLink class="nav-link active" aria-current="page" to="/">Home</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink class="nav-link" to="/about">About</RouterLink>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <RouterView/>
+  <footer class="text-center">
+    &copy; {{ year }} Yu-Gi-Oh! Shop
+  </footer>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>
