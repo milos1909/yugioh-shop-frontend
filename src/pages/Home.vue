@@ -2,11 +2,48 @@
     import Loading from '@/components/loading.vue';
     import type { SetModel } from '@/models/set.model';
     import axios from 'axios';
-    import { ref } from 'vue';
+    import { computed, onMounted, ref, watch } from 'vue';
 
     const sets = ref<SetModel[]>([])
+    const totalResults = ref(0)
+    const search = ref('')
+    const currentPage = ref(1)
+    const totalPages = computed(() =>
+        Math.ceil(totalResults.value / PAGE_SIZE)
+    )
+    const PAGE_SIZE = 18
 
-    axios.get('https://db.ygoprodeck.com/api/v7/cardsets.php').then(rsp => sets.value = rsp.data)
+    async function loadSets() {
+        const offset = ((currentPage.value - 1) * PAGE_SIZE)
+
+        const rsp = await axios.get('http://localhost:3300/sets', {
+            params: {
+                offset,
+                name: search.value
+            }
+        })
+
+        sets.value = rsp.data.sets
+        totalResults.value = rsp.data.total
+    }
+
+    function nextPage() {
+      currentPage.value++
+    }
+
+    function previousPage() {
+        if (currentPage.value > 1) {
+            currentPage.value--
+        }
+    }
+
+    watch(search, () => {
+        currentPage.value = 1
+    })
+
+    watch(currentPage, loadSets)
+
+    onMounted(loadSets)
 </script>
 
 <template>
@@ -15,13 +52,29 @@
             <h1 class="display-3 fw-bold text-white">
                 Yu-Gi-Oh! Shop
             </h1>
-
             <p class="lead text-white">
                 Explore cards, sets and build your collection
             </p>
         </div>
     </section>
     <div class="container mt-3">
+        <div class="d-flex mb-3 align-items-center justify-content-center controls">
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input v-model="search" @keyup.enter="loadSets" type="text" class="form-control search-bar" placeholder="Search sets...">
+            </div>
+            <div class="d-flex gap-1 align-items-center">
+                <button class="btn btn-outline-primary text-nowrap" @click="previousPage" :disabled="currentPage === 1">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <span class="text-nowrap">
+                    Page {{ currentPage }}/{{ totalPages }} of {{ totalResults }} total sets
+                </span>
+                <button class="btn btn-outline-primary text-nowrap" @click="nextPage" :disabled="sets.length < PAGE_SIZE">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
         <div class="d-flex flex-wrap gap-1 justify-content-center" v-if="sets.length > 0">
             <div class="card text-center" v-for="set in sets">
                 <div class="set-image-container">
@@ -44,7 +97,7 @@
 
 <style scoped>
     .banner {
-      height: 55vh;
+      height: 53vh;
 
       background:
           linear-gradient(
@@ -56,9 +109,33 @@
       background-size: cover;
       background-position: center;
     }
+
+    .controls {
+        gap: 5rem
+    }
+
+    .search-wrapper {
+        position: relative;
+    }
+
+    .search-icon {
+        position: absolute;
+
+        left: 12px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        color: gray;
+    }
+
+    .search-bar {
+        width: 300px;
+        padding-left: 2.5rem;
+    }
     
     .card {
-        width: 10rem;
+        width: 12rem;
         height: 24rem;
         display: flex;
         flex-direction: column;
