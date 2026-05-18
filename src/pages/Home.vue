@@ -68,7 +68,7 @@
         <div class="d-flex mb-3 align-items-center justify-content-center controls">
             <div class="search-wrapper">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input v-model="search" @keyup.enter="loadSets" type="text" class="form-control search-bar" placeholder="Search sets...">
+                <input v-model="search" @input="loadSets" type="text" class="form-control search-bar" placeholder="Search sets...">
             </div>
             <div class="d-flex gap-1 align-items-center">
                 <button class="btn btn-outline-primary text-nowrap" @click="previousPage" :disabled="currentPage === 1">

@@ -1,101 +1,89 @@
 <script setup lang="ts">
-import type { SetModel } from '@/models/set.model'
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+  import type { SetModel } from '@/models/set.model'
+import axios from 'axios'
+  import { onMounted, ref } from 'vue'
+  import { useRoute } from 'vue-router'
 
-const route = useRoute()
-const code = route.params.code
+  const route = useRoute()
+  const code = route.params.code
 
-const set = ref<SetModel>({
-  set_name: 'Legend of Blue Eyes White Dragon',
-  set_code: String(code),
-  num_of_cards: 126,
-  tcg_date: '2002-03-08',
-  set_image: ''
-})
+  const set = ref<SetModel>()
+  const cards = ref<any>([])
+  const loading = ref(false) 
 
-const cards = ref([
-  { id: 1, image: '/images/cards/89631139.jpg' },
-  { id: 2, image: '/images/cards/46986414.jpg' },
-  { id: 3, image: '/images/cards/70781052.jpg' },
-  { id: 4, image: '/images/cards/74677422.jpg' },
-  { id: 5, image: '/images/cards/33396948.jpg' },
-  { id: 6, image: '/images/cards/40374923.jpg' }
-])
+  async function loadSet() {
+      loading.value
+
+      try {      
+          const rsp = await axios.get(`http://localhost:3300/api/set/${code}`)
+
+          set.value = rsp.data.set_details
+          cards.value = rsp.data.cards
+
+          console.log(set)
+      } finally {
+          loading.value = false
+      }
+  }
+
+  onMounted(loadSet)
 </script>
 
 <template>
   <section class="set-details-page">
     <div class="container py-5">
-
-      <button class="btn btn-outline-warning mb-4">
+      <!-- <button class="btn btn-outline-warning mb-4">
         <i class="fa-solid fa-arrow-left me-2"></i>
         Back to sets
-      </button>
-
-      <div class="set-hero p-4 mb-5">
-        <div class="row align-items-center g-4">
-
-          <div class="col-md-4 text-center">
-            <img
-              :src="`/images/sets/${set.set_code}.jpg`"
-              :alt="set.set_name"
-              class="set-image"
-            >
-          </div>
-
-          <div class="col-md-8">
-            <h1 class="set-title mb-3">
-              {{ set.set_name }}
-            </h1>
-
+      </button> -->
+      <div v-if="set != null && cards.length > 0">
+        <div class="set-hero p-3 mb-3">
+          <div class="row align-items-center g-4">
+            <div class="col-md-4 text-center">
+              <img :src="`http://localhost:3300/images/sets/${set?.set_code}.jpg`" :alt="set?.set_name" class="set-image">
+            </div>
+            <div class="col-md-8">
+              <h1 class="set-title mb-3">
+                {{ set?.set_name }}
+              </h1>
             <div class="set-info">
               <p>
                 <span>Set Code:</span>
-                {{ set.set_code }}
+                {{ set?.set_code }}
               </p>
-
               <p>
                 <span>Cards:</span>
-                {{ set.num_of_cards }}
+                {{ set?.num_of_cards }}
               </p>
-
               <p>
                 <span>Release Date:</span>
-                {{ set.tcg_date }}
+                {{ set?.tcg_date }}
               </p>
             </div>
           </div>
-
         </div>
       </div>
-
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="section-title mb-0">
-          Cards in this set
-        </h2>
-
-        <span class="cards-count">
-          {{ cards.length }} cards
-        </span>
-      </div>
-
-      <div class="row g-4">
-        <div
-          v-for="card in cards"
-          :key="card.id"
-          class="col-6 col-sm-4 col-md-3 col-lg-2"
-        >
-          <div class="card-image-wrapper">
-            <img
-              :src="card.image"
-              alt="Yu-Gi-Oh card"
-              class="card-image"
-            >
+      
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="section-title mb-0">
+            Cards in this set
+          </h2>
+          <span class="cards-count">
+            {{ cards.length }} cards
+          </span>
+        </div>
+        <div class="row g-4">
+          <div v-for="card in cards" class="col-6 col-sm-4 col-md-3 col-lg-2">
+            <div class="card-image-wrapper">
+              <img
+                :src="`http://localhost:3300/images/cards/${card.id}.jpg`"
+                alt="Yu-Gi-Oh card"
+                class="card-image"
+              >
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 </template>
@@ -167,7 +155,8 @@ const cards = ref([
 }
 
 .card-image {
-  width: 100%;
+  width: 140px;
+  max-height: 190px;
   border-radius: 10px;
   display: block;
 }
