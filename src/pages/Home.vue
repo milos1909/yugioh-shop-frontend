@@ -5,6 +5,7 @@
     import { computed, onMounted, ref, watch } from 'vue';
 
     const sets = ref<SetModel[]>([])
+    const loading = ref(false)
     const totalResults = ref(0)
     const search = ref('')
     const currentPage = ref(1)
@@ -14,17 +15,23 @@
     const PAGE_SIZE = 18
 
     async function loadSets() {
-        const offset = ((currentPage.value - 1) * PAGE_SIZE)
+        loading.value
 
-        const rsp = await axios.get('http://localhost:3300/sets', {
-            params: {
-                offset,
-                name: search.value
-            }
-        })
+        try {
+            const offset = ((currentPage.value - 1) * PAGE_SIZE)
+            
+            const rsp = await axios.get('http://localhost:3300/api/sets', {
+                params: {
+                    name: search.value,
+                    offset
+                }
+            })
 
-        sets.value = rsp.data.sets
-        totalResults.value = rsp.data.total
+            sets.value = rsp.data.sets
+            totalResults.value = rsp.data.total
+        } finally {
+            loading.value = false
+        }
     }
 
     function nextPage() {
@@ -91,7 +98,11 @@
                 </div>
             </div>
         </div>
-        <Loading v-else/>
+        <Loading v-else-if="loading"/>
+
+        <div v-else class="text-center mt-4">
+            <h4>No matching sets found</h4>
+        </div>
     </div>
 </template>
 
