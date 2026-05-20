@@ -9,6 +9,6 @@
 <style scoped>
     .loading {
         text-align: center;
-        margin: auto;
+        margin: auto; 
     }
 </style>

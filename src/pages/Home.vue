@@ -64,7 +64,7 @@
             </p>
         </div>
     </section>
-    <div class="container mt-3">
+    <div class="container mt-3 mb-3 page-content">
         <div class="d-flex mb-3 align-items-center justify-content-center controls">
             <div class="search-wrapper">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -98,15 +98,22 @@
                 </div>
             </div>
         </div>
-        <Loading v-else-if="loading"/>
-
-        <div v-else class="text-center mt-4">
+        <div v-else-if="loading" class="empty-state">
+            <Loading />
+        </div>
+        <div v-else class="empty-state">
             <h4>No matching sets found</h4>
         </div>
     </div>
 </template>
 
 <style scoped>
+    .page-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1
+    }
+
     .banner {
       height: 53vh;
 
@@ -144,6 +151,10 @@
         width: 300px;
         padding-left: 2.5rem;
     }
+
+    .content {
+        flex: 1
+    }
     
     .card {
         width: 12rem;
@@ -159,13 +170,17 @@
         align-items: center;
     }
 
-
     .set-image {
         max-height: 140px;
         max-width: fit-content;
         justify-self: center;
         width: 100%;
         object-fit: contain;
+    }
+
+    .empty-state {
+        flex: 1;
+        display: flex;
     }
 
 </style>

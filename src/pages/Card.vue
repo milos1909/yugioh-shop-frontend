@@ -7,27 +7,28 @@
     import { useRoute } from 'vue-router'
 
     const route = useRoute()
-    const code = route.params.code
+    const id = route.params.id
 
-    const set = ref<SetModel>()
-    const cards = ref<CardModel[]>([])
+    const card = ref<CardModel>()
+    const sets = ref<SetModel[]>([])
+   
     const loading = ref(false) 
 
-    async function loadSet() {
+    async function loadCard() {
         loading.value = true
 
         try {      
-            const rsp = await axios.get(`http://localhost:3300/api/set/${code}`)
+            const rsp = await axios.get(`http://localhost:3300/api/card/${id}`)
             
-            set.value = rsp.data.set_details
-            cards.value = rsp.data.cards
+            card.value = rsp.data
+            sets.value = rsp.data.card_sets
 
         } finally {
             loading.value = false
         }
     }
 
-    onMounted(loadSet)
+    onMounted(loadCard)
 </script>
 
 <template>
@@ -36,28 +37,20 @@
     <section class="mb-5">
         <div class="row align-items-center justify-content-center">
             <div class="col-lg-2 text-center">
-                <img :src="`http://localhost:3300/images/sets/${set?.set_code}.jpg`" :alt="set?.set_name" class="img-fluid rounded shadow">
+                <img :src="`http://localhost:3300/images/cards/${card?.id}.jpg`" :alt="card?.name" class="img-fluid rounded shadow">
             </div>
             <div class="col-lg-5">
                 <p class="text-muted text-uppercase mb-1">
-                    Yu-Gi-Oh Card Set
+                    Yu-Gi-Oh Card
                 </p>
                 <h1 class="display-5 fw-bold mb-4">
-                    {{ set?.set_name }}
+                    {{ card?.name }}
                 </h1>
                 <table class="table">
                     <tbody>
                         <tr>
-                            <th>Set Code</th>
-                            <td>{{ set?.set_code }}</td>
-                        </tr>
-                        <tr>
-                            <th>Cards</th>
-                            <td>{{ set?.num_of_cards }}</td>
-                        </tr>
-                        <tr>
-                            <th>Release Date</th>
-                            <td>{{ set?.tcg_date }}</td>
+                            <th>Card type</th>
+                            <td>{{ card?.type }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -66,10 +59,8 @@
     </section>
     <section>
         <div class="row g-4">
-            <div v-for="card in cards" :key="card.id" class="col-lg-auto">
-                <RouterLink :to="`/card/${card.id}`">
-                    <img :src="`http://localhost:3300/images/cards/${card.id}.jpg`" class="img-fluid rounded shadow-sm card-image">
-                </RouterLink>
+            <div v-for="set in sets" :key="set.set_code" class="col-lg-auto">
+                <img :src="`http://localhost:3300/images/sets/${set.set_code}.jpg`" class="img-fluid rounded shadow-sm card-image">
             </div>
         </div>
     </section>

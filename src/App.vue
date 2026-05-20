@@ -27,7 +27,7 @@
     <main class="content">
       <RouterView/>
     </main>
-    <footer class="footer d-flex my-4 justify-content-center align-items-center py-3 border-top">
+    <footer class="footer d-flex justify-content-center align-items-center py-3 border-top">
       &copy; {{ year }} Yu-Gi-Oh! Shop 
     </footer>
   </div>
@@ -41,7 +41,9 @@
   }
 
   .content {
-      flex: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
    .footer {

@@ -1,3 +1,5 @@
+import type { SetModel } from "./set.model"
+
 export default interface CardModel {
     id: number
     name: string
@@ -10,5 +12,5 @@ export default interface CardModel {
     attribute?: string
     archetype?: string
     linkval?: number
-    imageUrlSmall: string
+    card_sets: SetModel[]
 }
