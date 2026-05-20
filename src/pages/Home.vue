@@ -15,7 +15,7 @@
     const PAGE_SIZE = 18
 
     async function loadSets() {
-        loading.value
+        loading.value = true
 
         try {
             const offset = ((currentPage.value - 1) * PAGE_SIZE)
@@ -167,4 +167,5 @@
         width: 100%;
         object-fit: contain;
     }
+
 </style>
