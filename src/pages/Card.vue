@@ -2,7 +2,7 @@
     import Loading from '@/components/loading.vue'
     import type CardModel from '@/models/card.model'
     import type { SetModel } from '@/models/set.model'
-    import axios from 'axios'
+    import { DataService } from '@/services/data.service'
     import { onMounted, ref } from 'vue'
     import { useRoute } from 'vue-router'
 
@@ -10,7 +10,6 @@
     const id = route.params.id
 
     const card = ref<CardModel>()
-    const sets = ref<SetModel[]>([])
    
     const loading = ref(false) 
 
@@ -18,11 +17,8 @@
         loading.value = true
 
         try {      
-            const rsp = await axios.get(`http://localhost:3300/api/card/${id}`)
-            
+            const rsp = await DataService.getCardById(Number(id))  
             card.value = rsp.data
-            sets.value = rsp.data.card_sets
-
         } finally {
             loading.value = false
         }
@@ -54,13 +50,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </section>
-    <section>
-        <div class="row g-4">
-            <div v-for="set in sets" :key="set.set_code" class="col-lg-auto">
-                <img :src="`http://localhost:3300/images/sets/${set.set_code}.jpg`" class="img-fluid rounded shadow-sm card-image">
             </div>
         </div>
     </section>
