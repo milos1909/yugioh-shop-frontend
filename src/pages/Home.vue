@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import Loading from '@/components/loading.vue';
     import type { SetModel } from '@/models/set.model';
-    import axios from 'axios';
+    import { DataService } from '@/services/data.service';
     import { computed, onMounted, ref, watch } from 'vue';
 
     const sets = ref<SetModel[]>([])
@@ -19,14 +19,9 @@
 
         try {
             const offset = ((currentPage.value - 1) * PAGE_SIZE)
-            
-            const rsp = await axios.get('http://localhost:3300/api/sets', {
-                params: {
-                    name: search.value,
-                    offset
-                }
-            })
 
+            const rsp = await DataService.getSets(search.value, offset)
+            
             sets.value = rsp.data.sets
             totalResults.value = rsp.data.total
         } finally {

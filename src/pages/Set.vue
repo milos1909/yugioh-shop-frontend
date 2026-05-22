@@ -2,7 +2,7 @@
     import Loading from '@/components/loading.vue'
     import type CardModel from '@/models/card.model'
     import type { SetModel } from '@/models/set.model'
-    import axios from 'axios'
+    import { DataService } from '@/services/data.service'
     import { onMounted, ref } from 'vue'
     import { useRoute } from 'vue-router'
 
@@ -17,7 +17,7 @@
         loading.value = true
 
         try {      
-            const rsp = await axios.get(`http://localhost:3300/api/set/${code}`)
+            const rsp = await DataService.getSetByCode(String(code))
             
             set.value = rsp.data.set_details
             cards.value = rsp.data.cards
