@@ -3,6 +3,9 @@ import Set from '@/pages/Set.vue'
 import Home from '@/pages/Home.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import Card from '@/pages/Card.vue'
+import Login from '@/pages/Login.vue'
+import Signup from '@/pages/Signup.vue'
+import Verify from '@/pages/Verify.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +36,27 @@ const router = createRouter({
       component: Card,
       meta: {
         title: 'Card'
+      }
+    },
+    {
+      path: '/login',
+      component: Login,
+      meta: {
+        title: 'Login'
+      }
+    },
+    {
+      path: '/signup',
+      component: Signup,
+      meta: {
+        title: 'Signup'
+      }
+    },
+    {
+      path: '/verify',
+      component: Verify,
+      meta: {
+        title: 'Email verification'
       }
     }
   ],

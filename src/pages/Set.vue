@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import Loading from '@/components/loading.vue'
+    import { getCardImage, getSetImage } from '@/helpers/image'
     import type CardModel from '@/models/card.model'
     import type { SetModel } from '@/models/set.model'
     import { DataService } from '@/services/data.service'
@@ -36,7 +37,7 @@
     <section class="mb-5">
         <div class="row align-items-center justify-content-center">
             <div class="col-lg-2 text-center">
-                <img :src="`http://localhost:3300/images/sets/${set?.set_code}.jpg`" :alt="set?.set_name" class="img-fluid rounded shadow">
+                <img :src="getSetImage(String(set?.set_code))" :alt="set?.set_name" class="img-fluid rounded shadow">
             </div>
             <div class="col-lg-5">
                 <p class="text-muted text-uppercase mb-1">
@@ -68,7 +69,7 @@
         <div class="row g-4">
             <div v-for="card in cards" :key="card.id" class="col-lg-auto">
                 <RouterLink :to="`/card/${card.id}`">
-                    <img :src="`http://localhost:3300/images/cards/${card.id}.jpg`" class="img-fluid rounded shadow-sm card-image">
+                    <img :src="getCardImage(card.id)" class="img-fluid rounded shadow-sm card-image">
                 </RouterLink>
             </div>
         </div>

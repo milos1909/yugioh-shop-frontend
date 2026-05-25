@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import Loading from '@/components/loading.vue';
+import { getSetImage, setFallbackImage } from '@/helpers/image';
     import type { SetModel } from '@/models/set.model';
     import { DataService } from '@/services/data.service';
     import { computed, onMounted, ref, watch } from 'vue';
@@ -80,7 +81,7 @@
         <div class="d-flex flex-wrap gap-1 justify-content-center" v-if="sets.length > 0">
             <div class="card text-center" v-for="set in sets">
                 <div class="set-image-container">
-                    <img :src="set.set_image ? `http://localhost:3300/images/sets/${set.set_code}.jpg`: '/back_high.jpg'" class="card-img-top set-image" :alt="set.set_name">
+                    <img :src="getSetImage(set.set_code)" class="card-img-top set-image" :alt="set.set_name" @error="(e) => setFallbackImage(e)">
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ set.set_name }}</h5>

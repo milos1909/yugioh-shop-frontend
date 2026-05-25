@@ -24,4 +24,12 @@ export class DataService {
     static async getCardById(id: number){
         return await client.get(`/card/${id}`)
     }
+
+    static async register(obj: any){
+        return await client.request({
+            url: '/user/signup',
+            method: 'POST',
+            data: obj
+        })
+    }
 }
