@@ -14,12 +14,19 @@ import { useRouter } from 'vue-router';
     })
 
     function signUp(){
-        DataService.register(payload.value).then(rsp => router.push('/verify'))
+        if(payload.value.username == '' || payload.value.email == '') return
+        if(payload.value.password == '' || payload.value.repeat == '') return
+        if(payload.value.repeat !== payload.value.password) return
+
+        DataService.register(payload.value).then(rsp => {
+            sessionStorage.setItem('verify_email', payload.value.email)
+            router.push('/verify')
+        })
     }
 </script>
 
 <template>
-    <form class="form-signin m-auto">
+    <div class="form-signin m-auto">
         <img class="mb-4" src="/puzzle.png" alt="" width="42" height="42" />
         <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
         <div class="form-floating">
@@ -38,7 +45,7 @@ import { useRouter } from 'vue-router';
             <input type="password" class="form-control" id="password" placeholder="Password" v-model="payload.repeat" />
             <label for="password">Repeat Password</label>
         </div>
-        <button class="btn btn-primary w-100 my-2" type="submit" @click="signUp"> 
+        <button class="btn btn-primary w-100 my-2" @click="signUp"> 
             <i class="fa-solid fa-arrow-right-to-bracket"></i> 
             Create account
         </button>
@@ -46,5 +53,5 @@ import { useRouter } from 'vue-router';
             Already have an account? <RouterLink to="/login">Log in</RouterLink>
         </div>
         <p class="mt-5 mb-3 text-body-secondary">© {{ year }}</p>
-    </form>
+    </div>
 </template>
