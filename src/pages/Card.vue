@@ -49,7 +49,7 @@
                                 <td>{{ card?.type }}</td>
                             </tr>
                             <tr>
-                                <th>Race</th>
+                                <th>Typing</th>
                                 <td>{{ card?.race }}</td>
                             </tr>
                             <tr v-if="card?.attribute">

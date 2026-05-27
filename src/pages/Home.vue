@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import Loading from '@/components/loading.vue';
-import { getSetImage, setFallbackImage } from '@/helpers/image';
+    import { getSetImage, setFallbackImage } from '@/helpers/image';
     import type { SetModel } from '@/models/set.model';
     import { DataService } from '@/services/data.service';
     import { computed, onMounted, ref, watch } from 'vue';
