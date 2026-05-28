@@ -17,7 +17,9 @@ export function useAuth() {
         })
     }
 
-    function logout() {
+    function logout(e: Error | null = null) {
+        if (e) alert(e.message)
+
         AuthService.clearAuth()
         auth.value = null
 

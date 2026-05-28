@@ -86,9 +86,10 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ set.set_name }}</h5>
                     <h6 class="card-subtitle mb-2 text-body-secondary">{{ set.tcg_date }}</h6>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ set.set_price }} €</h6>
                 </div>
                 <div class="card-footer">
-                    <RouterLink :to="`/set/${set.set_code}`" class="btn btn-primary">
+                    <RouterLink :to="`/set/${set.set_name}`" class="btn btn-primary">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i> Details
                     </RouterLink>
                 </div>

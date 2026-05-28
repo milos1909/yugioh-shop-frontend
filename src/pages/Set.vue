@@ -1,13 +1,18 @@
 <script setup lang="ts">
     import Loading from '@/components/loading.vue'
     import { getCardImage, getSetImage } from '@/helpers/image'
+    import { useAuth } from '@/hooks/auth.hook'
     import type CardModel from '@/models/card.model'
     import type { SetModel } from '@/models/set.model'
     import { DataService } from '@/services/data.service'
     import { onMounted, ref } from 'vue'
-    import { useRoute } from 'vue-router'
+    import { useRoute, useRouter } from 'vue-router'
 
     const route = useRoute()
+    const router = useRouter()
+
+    const { logout } = useAuth()
+
     const code = route.params.code
 
     const set = ref<SetModel>()
@@ -26,6 +31,14 @@
         } finally {
             loading.value = false
         }
+    }
+
+    function addToCart(set_name: string) {
+        if(!confirm(`Add ${set_name} to cart`)) return
+
+        DataService.useAxios(`/invoice/cart/add/${set_name}`, 'put')
+            .then(() => router.push('/cart'))
+            .catch(e => logout(e))
     }
 
     onMounted(loadSet)
@@ -60,8 +73,15 @@
                             <th>Release Date</th>
                             <td>{{ set?.tcg_date }}</td>
                         </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td>{{ set?.set_price }} €</td>
+                        </tr>
                     </tbody>
                 </table>
+                <button type="button" class="btn btn-success" @click="addToCart(set!.set_name)">
+                    <i class="fa-solid fa-cart-shopping"></i> Add to cart
+                </button>
             </div>
         </div>
     </section>

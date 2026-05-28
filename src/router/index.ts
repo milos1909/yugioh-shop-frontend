@@ -1,4 +1,3 @@
-import About from '@/pages/About.vue'
 import Set from '@/pages/Set.vue'
 import Home from '@/pages/Home.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -6,6 +5,8 @@ import Card from '@/pages/Card.vue'
 import Login from '@/pages/Login.vue'
 import Signup from '@/pages/Signup.vue'
 import Verify from '@/pages/Verify.vue'
+import Cart from '@/pages/Cart.vue'
+import User from '@/pages/User.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,13 +16,6 @@ const router = createRouter({
       component: Home,
       meta: {
         title: 'Home'
-      }
-    },
-    {
-      path: '/about',
-      component: About,
-      meta: {
-        title: 'About'
       }
     },
     {
@@ -57,6 +51,20 @@ const router = createRouter({
       component: Verify,
       meta: {
         title: 'Email verification'
+      }
+    },
+    {
+      path: '/cart',
+      component: Cart,
+      meta: {
+        title: 'Cart'
+      }
+    },
+    {
+      path: '/user',
+      component: User,
+      meta: {
+        title: 'User Profile'
       }
     }
   ],
