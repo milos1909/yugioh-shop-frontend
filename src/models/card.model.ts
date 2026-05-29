@@ -1,6 +1,6 @@
 import type { SetModel } from "./set.model"
 
-export default interface CardModel {
+export interface CardModel {
     id: number
     name: string
     type: string

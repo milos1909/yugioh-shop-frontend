@@ -7,6 +7,8 @@ import Signup from '@/pages/Signup.vue'
 import Verify from '@/pages/Verify.vue'
 import Cart from '@/pages/Cart.vue'
 import User from '@/pages/User.vue'
+import Catalogue from '@/pages/Catalogue.vue'
+import Invoice from '@/pages/Invoice.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +21,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/set/:code',
+      path: '/set/:set_name',
       component: Set,
       meta: {
         title: 'Set'
@@ -30,6 +32,13 @@ const router = createRouter({
       component: Card,
       meta: {
         title: 'Card'
+      }
+    },
+    {
+      path: '/catalogue',
+      component: Catalogue,
+      meta: {
+        title: 'Catalogue'
       }
     },
     {
@@ -66,6 +75,17 @@ const router = createRouter({
       meta: {
         title: 'User Profile'
       }
+    },
+    {
+      path: '/invoice/:id',
+      component: Invoice,
+      meta: {
+        title: 'Invoice details'
+      }
+    },
+    {
+      path: '/:pathmatch(.*)*',
+      redirect: '/'
     }
   ],
 })

@@ -84,8 +84,17 @@ export class DataService {
             })
     }
 
-    static async getSetByCode(set_code: string) {
-        return await client.get(`/set/${set_code}`)
+    static async getCards(search: string, offset: number) { 
+        return await client.get('/card', {
+                params: {
+                    name: search,
+                    offset
+                }
+            })
+    }
+
+    static async getSetByName(set_name: string) {
+        return await client.get(`/set/${set_name}`)
     }
 
     static async getCardById(id: number) {

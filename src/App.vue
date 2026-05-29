@@ -18,7 +18,7 @@
         </RouterLink>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
           <li class="nav-item">
-            <RouterLink class="nav-link active" to="/about">
+            <RouterLink class="nav-link active" to="/catalogue">
               <i class="fa-solid fa-layer-group"></i>
               Card Catalogue
             </RouterLink>

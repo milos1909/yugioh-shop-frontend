@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import Loading from '@/components/loading.vue'
-    import type CardModel from '@/models/card.model'
+    import type { CardModel } from '@/models/card.model'
+    import type { SetModel } from '@/models/set.model'
     import { DataService } from '@/services/data.service'
     import { onMounted, ref } from 'vue'
     import { useRoute } from 'vue-router'
@@ -9,6 +10,8 @@
     const id = route.params.id
 
     const card = ref<CardModel>()
+    const sets = ref<SetModel[]>([]) 
+
     const loading = ref(false)
 
     async function loadCard() {
@@ -17,6 +20,14 @@
         try {
             const rsp = await DataService.getCardById(Number(id))
             card.value = rsp.data
+
+            for(const set of card.value?.card_sets ?? []) {
+                const rsp = await DataService.getSetByName(set.set_name)
+                sets.value.push(rsp.data.set_details)
+                sets.value = sets.value.filter(
+                    (set, index, self) => index === self.findIndex(s => s.set_name === set.set_name)
+                )
+            }
         } finally {
             loading.value = false
         }
@@ -89,33 +100,51 @@
                 {{ card?.desc }}
             </p>
         </section>
-        <section class="p-4" v-if="card?.card_sets?.length">
-            <h3 class="mb-3">
-                Available In Sets
-            </h3>
+        <section class="sets-section p-4" v-if="card?.card_sets?.length">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">
+                    Available In Sets
+                </h3>
+                <span class="text-muted small">
+                    {{ sets.length }} sets
+                </span>
+            </div>
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
-
+                <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
                             <th>Set</th>
                             <th>Code</th>
-                            <th>Rarity</th>
+                            <th>Price</th>
+                            <th class="text-end">Details</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        <tr v-for="set in card.card_sets" :key="set.id">
-                            <td>{{ set.set_name }}</td>
-                            <td>{{ set.set_code }}</td>
+                        <tr v-for="set in sets" :key="set.set_code">
+                            <td class="fw-semibold">
+                                {{ set.set_name }}
+                            </td>
+                            <td>
+                                <span class="badge text-bg-secondary">
+                                    {{ set.set_code }}
+                                </span>
+                            </td>
+                            <td>
+                                {{ Number(set.set_price).toFixed(2) }} €
+                            </td>
+                            <td class="text-end">
+                                <RouterLink
+                                    :to="`/set/${set.set_name}`"
+                                    class="btn btn-sm btn-outline-primary"
+                                >
+                                    View Details
+                                </RouterLink>
+                            </td>
                         </tr>
                     </tbody>
-
                 </table>
             </div>
-
         </section>
-
     </div>
 </template>
 
@@ -139,4 +168,6 @@
     white-space: pre-line;
     line-height: 1.7;
 }
+
+
 </style>

@@ -31,7 +31,7 @@ import { computed, ref } from 'vue';
 
         DataService.useAxios('/invoice/pay', 'put')
             .then(rsp => router.push('/user'))
-            .catch(e => logout(e))
+            .catch(e => console.log(e.message))
     }
 
     function updateCount(item: any) {
@@ -54,6 +54,11 @@ import { computed, ref } from 'vue';
         if (!confirm(`Are you sure you want to remove the item ${item.set.set_name}?`))
             return
         DataService.useAxios(`/invoice/cart/${item.id}`, 'delete')
+            .then(() => {
+                cartItems.value = cartItems.value!.filter(
+                    i => i.id !== item.id
+                )
+            })
             .catch(e => logout(e))
     }
 </script>
