@@ -21,6 +21,8 @@ import { computed, ref } from 'vue';
     })
 
     function pay() {
+        
+
         if (cartItems.value?.length == 0) {
             alert('Cart is empty!')
             return
@@ -31,7 +33,7 @@ import { computed, ref } from 'vue';
 
         DataService.useAxios('/invoice/pay', 'put')
             .then(rsp => router.push('/user'))
-            .catch(e => console.log(e.message))
+            .catch(e => console.log(e))
     }
 
     function updateCount(item: any) {

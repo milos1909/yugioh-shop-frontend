@@ -12,7 +12,7 @@ import { InvoiceService } from '@/services/invoice.service'
     const route = useRoute()
     const router = useRouter()
 
-    const { logout } = useAuth()
+    const { auth,logout } = useAuth()
 
     const set_name = route.params.set_name
 
@@ -35,6 +35,11 @@ import { InvoiceService } from '@/services/invoice.service'
     }
 
     function addToCart(set_name: string) {
+        if(!auth.value){
+            alert('You must be logged in in order to buy items')
+            return
+        }
+
         if(!confirm(`Add ${set_name} to cart`)) return
 
         InvoiceService.addSetToCart(set_name)
